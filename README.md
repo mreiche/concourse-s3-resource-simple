@@ -9,9 +9,9 @@ Include the following in your Pipeline YAML file, replacing the values in the an
 ```yaml
 resource_types:
 - name: s3-bucket
-  type: docker-image
+  type: registry-image
   source:
-    repository: troykinsella/s3-resource-simple
+    repository: ghcr.io/mreiche/concourse-s3-resource-simple
 
 resources:
 - name: s3

@@ -8,8 +8,15 @@ on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
+    paths:
+      - Dockerfile
+      - assets/**
+      - .github/**
   pull_request:
     branches: [ "main" ]
+    paths:
+      - Dockerfile
+      - assets/**
   release:
     types: [published]
 
