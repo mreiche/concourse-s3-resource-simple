@@ -11,7 +11,7 @@ aws_options=$(echo "$payload" | jq -r '.source.aws_options // [] | join(" ")')
 
 export_aws_vars
 
-# Consider the most recent LastModified timestamp as the most recent version.
-timestamps=$(aws $aws_options s3api list-objects --bucket $bucket --prefix "$prefix" --query 'Contents[].{LastModified: LastModified}')
-recent="$(echo $timestamps | jq -r 'max_by(.LastModified)')"
-echo "[$recent]"
+# https://concourse-ci.org/docs/resource-types/implementing/
+timestamp=$(get_last_modified)
+jq -n --arg timestamp "$timestamp" \
+  '[{timestamp: $timestamp}]'
