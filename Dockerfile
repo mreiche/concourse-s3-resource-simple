@@ -1,8 +1,9 @@
-FROM python:3.5-alpine
+FROM python:3.14-alpine
 
-RUN apk add --update jq
+ARG RESOURCE_VERSION="1.0"
+ENV RESOURCE_VERSION="${RESOURCE_VERSION}"
 
-RUN pip install --upgrade pip
-RUN pip install --upgrade awscli
+RUN apk add --update --no-cache jq \
+    && pip install --upgrade awscli
 
 ADD assets/ /opt/resource/
