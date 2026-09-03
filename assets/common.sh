@@ -37,5 +37,5 @@ get_last_version() {
 
 emit_version() {
   recent=$(get_last_version)
-  echo "{\"version\": \"$recent\"" >&3
+  echo "{\"version\": \"$recent\"}" >&3
 }
