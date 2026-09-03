@@ -28,14 +28,16 @@ export_aws_vars() {
   fi
 }
 
-get_last_version() {
+get_last_modified() {
   timestamps=$(aws $aws_options s3api list-objects --bucket $bucket --prefix "$prefix" --query 'Contents[].{LastModified: LastModified}')
   recent="$(echo $timestamps | jq -r 'max_by(.LastModified)')"
-  echo $recent
+  timestamp="$(echo $recent | jq -r '.LastModified')"
+  echo $timestamp
 }
 
+# # https://concourse-ci.org/docs/resource-types/implementing/
 emit_version() {
-  recent=$(get_last_version)
-  jq -n --arg timestamp "$recent" \
+  timestamp=$(get_last_modified)
+  jq -n --arg timestamp "$timestamp" \
     '{version: {timestamp: $timestamp}}'
 }

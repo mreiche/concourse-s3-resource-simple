@@ -12,6 +12,6 @@ aws_options=$(echo "$payload" | jq -r '.source.aws_options // [] | join(" ")')
 export_aws_vars
 
 # https://concourse-ci.org/docs/resource-types/implementing/
-recent=$(get_last_version)
-jq -n --arg timestamp "$recent" \
+timestamp=$(get_last_modified)
+jq -n --arg timestamp "$timestamp" \
   '[{timestamp: $timestamp}]'
