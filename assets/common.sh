@@ -37,5 +37,5 @@ get_last_version() {
 emit_version() {
   recent=$(get_last_version)
   jq -n --arg timestamp "$recent" \
-    '[{version: {timestamp: $timestamp}}]'
+    '{version: {timestamp: $timestamp}}'
 }
