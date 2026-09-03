@@ -14,4 +14,4 @@ export_aws_vars
 # https://concourse-ci.org/docs/resource-types/implementing/
 recent=$(get_last_version)
 jq -n --arg timestamp "$recent" \
-  '[{version: $timestamp}]'
+  '[{timestamp: $timestamp}]'
