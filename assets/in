@@ -31,4 +31,4 @@ else
   echo "Done."
 fi
 
-emit_version
+emit_version >&3
