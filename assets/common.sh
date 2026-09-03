@@ -32,10 +32,10 @@ get_last_version() {
   timestamps=$(aws $aws_options s3api list-objects --bucket $bucket --prefix "$prefix" --query 'Contents[].{LastModified: LastModified}')
   recent="$(echo $timestamps | jq -r 'max_by(.LastModified)')"
 
-  return ${recent}
+  return $recent
 }
 
 emit_version() {
   recent=$(get_last_version)
-  echo "{\"version\": \"${recent}\"" >&3
+  echo "{\"version\": \"$recent\"" >&3
 }

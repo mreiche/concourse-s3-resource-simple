@@ -28,7 +28,7 @@ cd $source/$source_dir
 
 bucket_uri="s3://$bucket/$prefix"
 echo "Uploading '$source_dir' to '$bucket_uri'..."
-aws $aws_options s3 sync $source/$source_dir $bucket_uri $options
+eval aws $aws_options s3 sync $source/$source_dir $bucket_uri $options
 echo "Done."
 
 emit_version
