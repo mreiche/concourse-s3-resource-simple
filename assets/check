@@ -2,14 +2,13 @@
 
 set -e
 
+exec 3>&1 # make stdout available as fd 3 for the result
+exec 1>&2 # redirect all output to stderr for logging
+
 cwd=$(dirname $0)
+source "${cwd}/setup.sh"
 
-source "${cwd}/common.sh"
-source "${cwd}/read_params.sh"
-
-export_aws_vars
-
-# https://concourse-ci.org/docs/resource-types/implementing/
-timestamp=$(get_last_modified)
-jq -n --arg timestamp "$timestamp" \
-  '[{LastModified: $timestamp}]'
+last_modified=$(get_last_modified)
+jq -n --arg last_modified "${last_modified}" \
+  '[{LastModified: $last_modified}]' \
+  >&3

@@ -7,23 +7,24 @@ exec 1>&2 # redirect all output to stderr for logging
 
 dest=$1
 
-if [ -z "$dest" ]; then
+if [ -z "${dest}" ]; then
   echo "usage: $0 <path/to/volume>"
   exit 1
 fi
 
 cwd=$(dirname $0)
+source "${cwd}/setup.sh"
 
-source "${cwd}/common.sh"
-source "${cwd}/read_params.sh"
-export_aws_vars
+last_modified=$(get_last_modified)
 
-if [ "$skip_download" = "true" ]; then
-  echo "Skipping download from S3"
-else
-  echo "Downloading from '${bucket_uri}' using ${command}..."
-  eval aws ${aws_options} s3 ${command} "${bucket_uri}" ${dest} ${options}
-  echo "Done."
-fi
+#if [ "${skip_download}" = "true" ]; then
+#  echo "Skipping download"
+#else
+echo "Downloading from ${bucket}/${prefix} using ${command}..."
+rc ${command} "local/${bucket}/${prefix}" "${dest}" ${global_options} ${local_options}
+echo "Done"
+#fi
 
-emit_version >&3
+jq -n --arg last_modified "${last_modified}" \
+  '{version: { LastModified: $last_modified }}'\
+  >&3

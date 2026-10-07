@@ -11,18 +11,22 @@ if [ -z "$source" ]; then
   echo "usage: $0 </full/path/to/dir>"
   exit 1
 fi
-
+date -u +"%Y-%m-%dT%H:%M:%S.%3NZ"
 cwd=$(dirname $0)
-
-source "${cwd}/common.sh"
-source "${cwd}/read_params.sh"
+source "${cwd}/setup.sh"
 test -z "${source_dir}" && { echo "Must supply params.source_dir" >&2; exit 1; }
 
-export_aws_vars
-
 dir="${source}/${source_dir}"
-echo "Uploading '${dir}' to '${bucket_uri}' using ${command}..."
-eval aws ${aws_options} s3 sync "${dir}" "${bucket_uri}" ${options}
-echo "Done."
+echo "Uploading to ${bucket}/${prefix} using ${command}..."
+rc ${command} "${dir}" "local/${bucket}/${prefix}" ${global_options} ${local_options}
 
-emit_version >&3
+# Use ms Unix timestamp
+last_modified=$(jq -nr 'now * 1000 | floor')
+echo "${last_modified}" > "/tmp/_last_modified"
+rc put "/tmp/_last_modified" "local/${bucket}/${global_prefix}"
+
+echo "Done"
+
+jq -n --arg last_modified "${last_modified}" \
+  '{version: { LastModified: $last_modified }}'\
+  >&3

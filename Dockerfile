@@ -1,18 +1,3 @@
-FROM python:3.14.8-alpine
-
-RUN apk add --update --no-cache jq
-
-RUN chown -R guest /opt
-USER guest
-WORKDIR /opt
-
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=1 \
-    VIRTUAL_ENV=/opt/venv \
-    PATH="/opt/venv/bin:$PATH"
-
-RUN python -m venv "${VIRTUAL_ENV}" \
-    && pip install --upgrade awscli \
-    && aws --version
+FROM rustfs/rc:v0.1.36
 
 ADD assets/ /opt/resource/
