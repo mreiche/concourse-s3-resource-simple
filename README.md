@@ -22,14 +22,14 @@ resources:
     secret_access_key: ((aws_secret_key)) # Optional
     options: []  # Optional
     debug: false  # Optional
-    prefix: /my-prefix # Optional
+    prefix: my-prefix # Optional
 
 jobs:
   - name: publish-files
     plan:
       - get: s3
         params: 
-          prefix: /my-prefix # Optional
+          prefix: my-prefix # Optional
           options: []  # Optional
           copy: false  # Optional
 
@@ -37,18 +37,23 @@ jobs:
         inputs:
           - name: s3
             path: local-folder
-
+        outputs:
+          - name: local-folder
+      
       - put: s3
+        no_get: true
+        inputs:
+          - local-folder
         params:
           source_dir: local-folder
-          prefix: /my-prefix # Optional
+          prefix: my-prefix # Optional
           copy: false  # Optional
           options: []  # Optional
 ```
 
 ### Prefix
 
-Use `prefix` to get or put files as path below the bucket. It's build like `${source.prefix}${params.prefix}`.
+Use `prefix` to get or put files as path below the bucket. It's built like `${source.bucket}/${source.prefix}${params.prefix}`.
 
 ### Options
 
@@ -56,4 +61,4 @@ Set any option of the RustFS CLI (https://github.com/rustfs/cli/blob/main/docs/r
 
 ### Change detection
 
-This resource creates a file `${bucket}${source.prefix}/_last_modified` with current Unix timestamp on `put` to detect changes via. `check`.
+This resource creates a file `${source.bucket}/${source.prefix}/_last_modified` with the current Unix timestamp to detect changes between `put` and `check`.
