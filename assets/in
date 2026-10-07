@@ -17,13 +17,9 @@ source "${cwd}/setup.sh"
 
 last_modified=$(get_last_modified)
 
-#if [ "${skip_download}" = "true" ]; then
-#  echo "Skipping download"
-#else
 echo "Downloading from ${bucket}/${prefix} using ${command}..."
 rc ${command} "local/${bucket}/${prefix}" "${dest}" ${global_options} ${local_options}
 echo "Done"
-#fi
 
 jq -n --arg last_modified "${last_modified}" \
   '{version: { LastModified: $last_modified }}'\

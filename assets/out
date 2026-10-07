@@ -23,7 +23,7 @@ rc ${command} "${dir}" "local/${bucket}/${prefix}" ${global_options} ${local_opt
 # Use ms Unix timestamp
 last_modified=$(jq -nr 'now * 1000 | floor')
 echo "${last_modified}" > "/tmp/_last_modified"
-rc put "/tmp/_last_modified" "local/${bucket}/${global_prefix}"
+rc put "/tmp/_last_modified" "local/${bucket}/${global_prefix:+${global_prefix}/}"
 
 echo "Done"
 

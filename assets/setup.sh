@@ -13,7 +13,7 @@ get_bucket() {
 }
 
 get_last_modified() {
-  if rc get "local/${bucket}/${global_prefix}/_last_modified" /tmp/_last_modified >&2; then
+  if rc get "local/${bucket}/${global_prefix:+${global_prefix}/}_last_modified" /tmp/_last_modified --quiet >&2; then
     cat /tmp/_last_modified
   else
     echo
