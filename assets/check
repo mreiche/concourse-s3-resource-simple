@@ -2,16 +2,14 @@
 
 set -e
 
-source "$(dirname $0)/common.sh"
+cwd=$(dirname $0)
 
-payload=`cat`
-bucket=$(get_bucket)
-prefix=$(get_prefix)
-aws_options=$(echo "$payload" | jq -r '.source.aws_options // [] | join(" ")')
+source "${cwd}/common.sh"
+source "${cwd}/read_params.sh"
 
 export_aws_vars
 
 # https://concourse-ci.org/docs/resource-types/implementing/
 timestamp=$(get_last_modified)
 jq -n --arg timestamp "$timestamp" \
-  '[{timestamp: $timestamp}]'
+  '[{LastModified: $timestamp}]'

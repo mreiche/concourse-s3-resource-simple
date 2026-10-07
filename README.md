@@ -24,15 +24,25 @@ resources:
     aws_options: "--endpoint-url https://objects-us-east-1.dream.io" # Optional
 
 jobs:
-- name: publish-files
-  plan:
-  - task: Generate some files
-    output_mapping:
-      files: s3-upload
-  - put: s3
-    params:
-      prefix: /my-s3-dir # Optional
-      source_dir: s3-upload
+  - name: publish-files
+    plan:
+      - get: s3
+        params: 
+          prefix: /my-prefix # Optional
+          options: []  # Optional
+          copy: false  # Optional
+
+      - task: "do-something"
+        inputs:
+          - name: s3
+            path: local-folder
+
+      - put: s3
+        params:
+          source_dir: local-folder
+          prefix: /my-prefix # Optional
+          copy: false  # Optional
+          options: []  # Optional
 ```
 
 ## AWS Credentials

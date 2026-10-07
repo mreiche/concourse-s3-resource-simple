@@ -39,5 +39,5 @@ get_last_modified() {
 emit_version() {
   timestamp=$(get_last_modified)
   jq -n --arg timestamp "$timestamp" \
-    '{version: {timestamp: $timestamp}}'
+    '{version: {LastModified: $timestamp}}'
 }
