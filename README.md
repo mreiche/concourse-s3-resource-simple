@@ -28,14 +28,19 @@ jobs:
     plan:
       - get: s3
         params: 
-          prefix: /my-s3-dir # Optional
+          prefix: /my-prefix # Optional
           options: []  # Optional
           copy: false  # Optional
 
+      - task: "do-something"
+        inputs:
+          - name: s3
+            path: local-folder
+
       - put: s3
         params:
-          source_dir: s3-upload
-          prefix: /my-s3-dir # Optional
+          source_dir: local-folder
+          prefix: /my-prefix # Optional
           copy: false  # Optional
           options: []  # Optional
 ```
