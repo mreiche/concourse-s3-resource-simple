@@ -22,7 +22,6 @@ if [ "$skip_download" = "true" ]; then
   echo "Skipping download from S3"
 else
   echo "Downloading from '${bucket_uri}' using ${command}..."
-  echo aws ${aws_options} s3 ${command} "${bucket_uri}" ${dest} ${options}
   eval aws ${aws_options} s3 ${command} "${bucket_uri}" ${dest} ${options}
   echo "Done."
 fi
