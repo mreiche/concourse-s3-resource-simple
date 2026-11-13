@@ -1,3 +1,3 @@
-FROM rustfs/rc:v0.1.36
+FROM rustfs/rc:v0.1.37
 
 ADD assets/ /opt/resource/
